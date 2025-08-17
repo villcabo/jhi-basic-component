@@ -6,6 +6,11 @@
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
+    "paths": {
+      "jhi-basic-component": [
+        "./dist/jhi-basic-component"
+      ]
+    },
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
@@ -22,5 +27,13 @@
     "typeCheckHostBindings": true,
     "strictTemplates": true
   },
-  "files": []
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/jhi-basic-component/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/jhi-basic-component/tsconfig.spec.json"
+    }
+  ]
 }

@@ -1,0 +1,31 @@
+<div class="breadcrumb-container">
+  <!-- Combined Back Button with Breadcrumb -->
+  <div class="combined-navigation" *ngIf="shouldShowBreadcrumb">
+    <div class="d-flex align-items-center mb-3">
+      <a
+        class="btn btn-outline-secondary me-3"
+        [routerLink]="getBackRouteUrl()"
+        [queryParams]="getBackRouteQueryParams()"
+        [title]="backButtonTitle"
+        *ngIf="showBackButton"
+      >
+        <fa-icon icon="arrow-left"></fa-icon>
+      </a>
+
+      <nav aria-label="breadcrumb" class="flex-grow-1">
+        <ol class="breadcrumb mb-0">
+          <li *ngFor="let item of items(); let last = last" class="breadcrumb-item" [class.active]="last">
+            <a *ngIf="!last && item.route" [routerLink]="item.route" [queryParams]="item.queryParams" class="text-decoration-none">
+              <fa-icon *ngIf="item.icon" [icon]="item.icon" class="me-1"></fa-icon>
+              {{ item.label }}
+            </a>
+            <span *ngIf="last || !item.route">
+              <fa-icon *ngIf="item.icon" [icon]="item.icon" class="me-1"></fa-icon>
+              {{ item.label }}
+            </span>
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</div>

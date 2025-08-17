@@ -1,0 +1,111 @@
+@if (displaySearch) {
+  <div class="filter-container">
+    <div class="filter-header">
+      <h6 class="mb-3">
+        <fa-icon icon="search" class="me-2"></fa-icon>
+        Advanced Search
+        <small class="text-muted ms-3"> <kbd>F3</kbd> Hide | <kbd>F2</kbd> <kbd>Enter</kbd> Search | <kbd>F4</kbd> Reset </small>
+      </h6>
+    </div>
+    <form [formGroup]="filterForm" (ngSubmit)="onSearch()">
+      <div class="row">
+        @for (item of filterItems; let i = $index; track item.searchKey) {
+          <div class="col-md-3">
+            <div class="form-group">
+              <span>{{ item.title }}</span>
+
+              <!-- Input Text -->
+              <!-- Add #firstInput to the first input field -->
+              @if (item.type === 'input' && i === 0) {
+                <input
+                  #firstInput
+                  type="text"
+                  class="form-control"
+                  [formControlName]="item.searchKey"
+                  [placeholder]="item.placeholder || ''"
+                  [disabled]="item.disabled || false"
+                />
+              } @else if (item.type === 'input') {
+                <input
+                  type="text"
+                  class="form-control"
+                  [formControlName]="item.searchKey"
+                  [placeholder]="item.placeholder || ''"
+                  [disabled]="item.disabled || false"
+                />
+              }
+
+              <!-- Select -->
+              @if (item.type === 'comboSelect') {
+                <select
+                  class="form-control"
+                  [formControlName]="item.searchKey"
+                  (focus)="onLoadOptions(item)"
+                  [disabled]="item.disabled || optionsLoading()[item.searchKey]"
+                >
+                  <option value="">{{ item.placeholder || 'Seleccione...' }}</option>
+                  @if (item.options) {
+                    @for (opt of item.options; track opt.value) {
+                      <option [value]="opt.value">{{ opt.key }}</option>
+                    }
+                  }
+                  @if (optionsLoading()[item.searchKey]) {
+                    <option disabled>Cargando...</option>
+                  }
+                </select>
+              }
+
+              <!-- MultiSelect -->
+              @if (item.type === 'comboCheck') {
+                <select
+                  class="form-control"
+                  [formControlName]="item.searchKey"
+                  multiple
+                  (focus)="onLoadOptions(item)"
+                  [disabled]="item.disabled || optionsLoading()[item.searchKey]"
+                >
+                  @if (item.options) {
+                    @for (opt of item.options; track opt.value) {
+                      <option [value]="opt.value">{{ opt.key }}</option>
+                    }
+                  }
+                  @if (optionsLoading()[item.searchKey]) {
+                    <option disabled>Cargando...</option>
+                  }
+                </select>
+              }
+
+              <!-- Date Picker -->
+              @if (item.type === 'date') {
+                <input type="date" class="form-control" [formControlName]="item.searchKey" [disabled]="item.disabled || false" />
+              }
+
+              <!-- Numeric Input -->
+              @if (item.type === 'numeric') {
+                <input
+                  type="number"
+                  class="form-control"
+                  [formControlName]="item.searchKey"
+                  [min]="item.min || 0"
+                  [max]="item.max || 9999999999"
+                  [step]="item.step || 1"
+                  [disabled]="item.disabled || false"
+                />
+              }
+            </div>
+          </div>
+        }
+      </div>
+      <div class="row mt-3">
+        <div class="col-12 d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-outline-secondary rounded-pill" (click)="onReset()">
+            <fa-icon icon="eraser" class="me-1"></fa-icon> Reset
+          </button>
+          <button type="submit" class="btn btn-primary rounded-pill" (click)="onSearch()">
+            <fa-icon icon="search" class="me-1"></fa-icon> Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+}

@@ -3,5 +3,34 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
+    "jhi-basic-component": {
+      "projectType": "library",
+      "root": "projects/jhi-basic-component",
+      "sourceRoot": "projects/jhi-basic-component/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/jhi-basic-component/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/jhi-basic-component/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/jhi-basic-component/tsconfig.spec.json"
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": "6ed663fa-8783-4f2e-b7f3-d2c6fe34d3b4"
   }
 }
