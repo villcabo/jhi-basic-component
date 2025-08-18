@@ -3,14 +3,14 @@
 A comprehensive Angular component library providing essential UI components for modern web applications. This library includes reusable components for toggles, advanced search functionality, breadcrumb navigation, and confirmation dialogs.
 
 ## Version
-Current version: **1.0.0**
+Current version: **1.0.1**
 
 ## Installation
 
 Install the library via npm:
 
 ```bash
-npm install villcabo/jhi-basic-component
+npm install jhi-basic-component
 ```
 
 ### Dependencies
@@ -29,14 +29,6 @@ This library requires the following peer dependencies:
 }
 ```
 
-## Getting Started
-
-All components are standalone and can be imported directly into your Angular components:
-
-```typescript
-import { ActiveToggleComponent, AdvancedSearchComponent, ButtonSearchComponent, BreadcrumbComponent } from 'villcabo/jhi-basic-component';
-```
-
 ## Components
 
 ### 1. ActiveToggleComponent
@@ -53,7 +45,7 @@ A customizable toggle component for activating/deactivating items with optional 
 #### Usage
 
 ```typescript
-import { ActiveToggleComponent } from 'villcabo/jhi-basic-component';
+import { ActiveToggleComponent } from 'jhi-basic-component';
 
 @Component({
   standalone: true,
@@ -114,7 +106,7 @@ A powerful search component with multiple filter types and keyboard shortcuts.
 #### Usage
 
 ```typescript
-import { AdvancedSearchComponent, FilterItem, FilterOutput } from 'villcabo/jhi-basic-component';
+import { AdvancedSearchComponent, FilterItem, FilterOutput } from 'jhi-basic-component';
 
 @Component({
   standalone: true,
@@ -203,7 +195,7 @@ A companion component for toggling the advanced search visibility.
 #### Usage
 
 ```typescript
-import { ButtonSearchComponent } from 'villcabo/jhi-basic-component';
+import { ButtonSearchComponent } from 'jhi-basic-component';
 
 @Component({
   standalone: true,
@@ -240,7 +232,7 @@ An intelligent breadcrumb navigation component that automatically generates navi
 #### Usage
 
 ```typescript
-import { BreadcrumbComponent } from 'villcabo/jhi-basic-component';
+import { BreadcrumbComponent } from 'jhi-basic-component';
 
 @Component({
   standalone: true,
@@ -276,7 +268,7 @@ A flexible confirmation dialog system with customizable messages and buttons.
 #### Usage
 
 ```typescript
-import { ConfirmDialogService } from 'villcabo/jhi-basic-component';
+import { ConfirmDialogService } from 'jhi-basic-component';
 
 @Component({
   // ...
@@ -300,8 +292,8 @@ export class MyComponent {
   }
 
   async toggleUserStatus(): Promise<void> {
-    const confirmed = await this.confirmDialog.openActivateDialog({
-      isActivated: !this.user.active
+    const confirmed = await this.confirmDialog.openActivateDialog({ 
+      isActivated: !this.user.active 
     });
 
     if (confirmed) {
@@ -345,7 +337,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     // ... other providers
     provideAnimations(),
-    // ...
+    // ... 
   ],
 };
 
