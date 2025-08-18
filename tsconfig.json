@@ -7,9 +7,6 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "paths": {
-      "@villcabo/jhi-basic-component": [
-        "./dist/villcabo/jhi-basic-component"
-      ],
       "jhi-basic-component": [
         "./dist/jhi-basic-component"
       ]
@@ -37,12 +34,6 @@
     },
     {
       "path": "./projects/jhi-basic-component/tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/villcabo/jhi-basic-component/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/villcabo/jhi-basic-component/tsconfig.spec.json"
     }
   ]
 }
