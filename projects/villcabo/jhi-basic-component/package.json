@@ -1,9 +1,9 @@
 {
-  "name": "jhi-basic-component",
-  "version": "1.0.1",
+  "name": "@villcabo/jhi-basic-component",
+  "version": "1.0.0",
   "peerDependencies": {
-    "@angular/common": "20.1.0",
-    "@angular/core": "20.1.0",
+    "@angular/common": "^20.1.0",
+    "@angular/core": "^20.1.0",
     "@fortawesome/angular-fontawesome": "1.0.0",
     "@fortawesome/fontawesome-svg-core": "6.7.2",
     "@fortawesome/free-regular-svg-icons": "6.7.2",

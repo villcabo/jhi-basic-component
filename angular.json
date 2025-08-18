@@ -3,20 +3,20 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "jhi-basic-component": {
+    "@villcabo/jhi-basic-component": {
       "projectType": "library",
-      "root": "projects/jhi-basic-component",
-      "sourceRoot": "projects/jhi-basic-component/src",
+      "root": "projects/villcabo/jhi-basic-component",
+      "sourceRoot": "projects/villcabo/jhi-basic-component/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
-              "tsConfig": "projects/jhi-basic-component/tsconfig.lib.prod.json"
+              "tsConfig": "projects/villcabo/jhi-basic-component/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/jhi-basic-component/tsconfig.lib.json"
+              "tsConfig": "projects/villcabo/jhi-basic-component/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -24,7 +24,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "tsConfig": "projects/jhi-basic-component/tsconfig.spec.json"
+            "tsConfig": "projects/villcabo/jhi-basic-component/tsconfig.spec.json"
           }
         }
       }
