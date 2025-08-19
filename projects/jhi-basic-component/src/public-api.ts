@@ -2,13 +2,14 @@
  * Public API Surface of jhi-basic-component
  */
 
-export * from './lib/active-toggle/active-toggle.component';
+// Active Toggle Component
+export * from './lib/active-toggle';
 
-export * from './lib/advanced-search/advanced-search.component';
-export * from './lib/advanced-search/button-search.component';
+// Advanced Search Component
+export * from './lib/advanced-search';
 
-export * from './lib/breadcrumb/breadcrumb.component';
-export * from './lib/breadcrumb/breadcrumb.model';
+// Breadcrumb Component
+export * from './lib/breadcrumb';
 
-export * from './lib/confirm-dialog/confirm-dialog.component';
-export * from './lib/confirm-dialog/confirm-dialog.service';
+// Confirm Dialog Component & Service
+export * from './lib/confirm-dialog';

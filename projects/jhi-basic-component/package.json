@@ -1,14 +1,38 @@
 {
   "name": "jhi-basic-component",
-  "version": "1.0.6",
+  "version": "1.0.8",
+  "description": "A comprehensive Angular component library providing essential UI components for modern web applications",
+  "keywords": [
+    "angular",
+    "components",
+    "ui",
+    "library",
+    "typescript",
+    "bootstrap",
+    "fontawesome"
+  ],
+  "author": {
+    "name": "villcabo",
+    "url": "https://github.com/villcabo"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/villcabo/jhi-basic-component#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/villcabo/jhi-basic-component.git"
+  },
+  "bugs": {
+    "url": "https://github.com/villcabo/jhi-basic-component/issues"
+  },
   "peerDependencies": {
-    "@angular/common": "^19.2.0",
-    "@angular/core": "^19.2.0",
-    "@fortawesome/angular-fontawesome": "1.0.0",
-    "@fortawesome/fontawesome-svg-core": "6.7.2",
-    "@fortawesome/free-regular-svg-icons": "6.7.2",
-    "@fortawesome/free-solid-svg-icons": "6.7.2",
-    "@ng-bootstrap/ng-bootstrap": "18.0.0"
+    "@angular/common": "^18.0.0 || ^19.0.0",
+    "@angular/core": "^18.0.0 || ^19.0.0",
+    "@angular/forms": "^18.0.0 || ^19.0.0",
+    "@angular/router": "^18.0.0 || ^19.0.0",
+    "@fortawesome/angular-fontawesome": "^1.0.0",
+    "@fortawesome/fontawesome-svg-core": "^6.0.0",
+    "@fortawesome/free-solid-svg-icons": "^6.0.0",
+    "@ng-bootstrap/ng-bootstrap": "^18.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"

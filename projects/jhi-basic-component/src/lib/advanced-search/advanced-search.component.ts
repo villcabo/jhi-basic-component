@@ -78,7 +78,7 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit, OnChanges
   loading = signal(false);
   optionsLoading = signal<Record<string, boolean>>({});
 
-  @ViewChild('firstInput') firstInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('firstInput', { static: false }) firstInput?: ElementRef<HTMLInputElement>;
 
   private fb = inject(FormBuilder);
   private _filterItems = signal<FilterItem[]>([]);
@@ -94,7 +94,7 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit, OnChanges
     this.loadFromUrl();
   }
 
-  async onLoadOptions(item: FilterItem): Promise<void> {
+  private async onLoadOptions(item: FilterItem): Promise<void> {
     if (item.loadOptions && !item.options) {
       this.optionsLoading.update(current => ({
         ...current,
