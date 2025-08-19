@@ -1,2 +1,1 @@
-export * from './active-toggle.component';
-
+export { ActiveToggleComponent } from './active-toggle.component';
