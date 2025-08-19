@@ -1,6 +1,5 @@
 import { Component, Input, inject, computed, signal, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IBreadcrumbItem } from './breadcrumb.model';
@@ -31,8 +30,6 @@ export class BreadcrumbComponent implements OnInit {
     return this.generateBreadcrumbItems(backRoute);
   });
 
-  private router = inject(Router);
-  private location = inject(Location);
   private activatedRoute = inject(ActivatedRoute);
 
   // Signal para el backRoute obtenido de query params
@@ -42,7 +39,9 @@ export class BreadcrumbComponent implements OnInit {
     // Suscribirse a los query parameters para obtener backRoute
     this.activatedRoute.queryParams.subscribe(params => {
       const backRoute = params['backRoute'];
-      this.backRouteSignal.set(backRoute ?? null);
+      // Decodificar la URL para manejar caracteres especiales
+      const decodedBackRoute = backRoute ? decodeURIComponent(backRoute) : null;
+      this.backRouteSignal.set(decodedBackRoute);
     });
   }
 

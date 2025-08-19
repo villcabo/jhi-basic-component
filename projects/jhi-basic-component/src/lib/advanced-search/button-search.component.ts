@@ -15,7 +15,8 @@ const localStorageKey = 'jhiDisplaySearch';
       class="btn me-2"
       (click)="onDisplaySearch()"
       [disabled]="isLoading"
-      [ngClass]="{ 'btn-danger': displaySearch, 'btn-dark': !displaySearch }"
+      [class.btn-danger]="displaySearch"
+      [class.btn-dark]="!displaySearch"
       placement="top"
       ngbTooltip="Shortcut: Press F3"
     >

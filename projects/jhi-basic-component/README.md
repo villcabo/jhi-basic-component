@@ -1,6 +1,6 @@
 # JHI Basic Component Library
 
-A comprehensive Angular component library providing essential UI components for modern web applications.
+A comprehensive Angular component library providing essential UI components for modern web applications built with Angular 19+ and Bootstrap.
 
 ## Installation
 
@@ -19,7 +19,7 @@ A smart toggle component for activating/deactivating items with optional confirm
 - Optional confirmation dialogs
 - Multiple sizes (sm, md, lg)
 - Disabled state support
-- Bootstrap styling
+- Bootstrap styling integration
 
 #### Usage
 
@@ -50,168 +50,132 @@ export class ExampleComponent {
 }
 ```
 
-#### Inputs
-- `isActive: boolean | null | undefined` - Current active state
-- `disabled: boolean` - Whether the toggle is disabled (default: false)
-- `activeText: string` - Text to display when active (default: 'Activated')
-- `inactiveText: string` - Text to display when inactive (default: 'Deactivated')
-- `size: 'sm' | 'md' | 'lg'` - Size of the toggle button (default: 'sm')
-- `showConfirmDialog: boolean` - Show confirmation dialog (default: true)
+#### Properties
 
-#### Outputs
-- `toggleChange: EventEmitter<boolean>` - Emitted when toggle state changes
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `isActive` | `boolean \| null \| undefined` | `false` | Current active state |
+| `disabled` | `boolean` | `false` | Disable the toggle |
+| `activeText` | `string` | `'Activated'` | Text when active |
+| `inactiveText` | `string` | `'Deactivated'` | Text when inactive |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'sm'` | Button size |
+| `showConfirmDialog` | `boolean` | `true` | Show confirmation dialog |
+
+#### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `toggleChange` | `EventEmitter<boolean>` | Emitted when state changes |
 
 ---
 
 ### 2. Advanced Search Component
 
-A powerful search component with multiple filter types and form validation.
+A powerful search component with toggle functionality and keyboard shortcuts.
 
 #### Features
-- Multiple filter types: input, select, date, numeric, boolean
-- Async option loading
-- Local storage persistence
-- Form validation
-- Responsive design
+- Toggle search visibility
+- Keyboard shortcut support (F3)
+- Loading states
+- LocalStorage persistence
+- FontAwesome icons
+- Bootstrap tooltips
 
 #### Usage
 
 ```typescript
-import { AdvancedSearchComponent, FilterItem } from 'jhi-basic-component';
+import { AdvancedSearchComponent, ButtonSearchComponent } from 'jhi-basic-component';
 
 @Component({
-  selector: 'app-search',
-  imports: [AdvancedSearchComponent],
+  selector: 'app-search-example',
+  imports: [AdvancedSearchComponent, ButtonSearchComponent],
   template: `
+    <!-- Search Toggle Button -->
+    <jhi-button-search
+      [displaySearch]="showSearch"
+      [isLoading]="searching"
+      (displaySearchChange)="onToggleSearch($event)">
+    </jhi-button-search>
+
+    <!-- Search Form -->
     <jhi-advanced-search
-      [filterItems]="searchFilters"
-      [displaySearch]="showFilters"
-      (searchEvent)="onSearch($event)"
-      (resetEvent)="onReset()">
+      *ngIf="showSearch"
+      [searchForm]="searchFormGroup"
+      [isLoading]="searching"
+      (searchSubmit)="onSearch($event)"
+      (searchReset)="onReset()">
     </jhi-advanced-search>
   `
 })
-export class SearchComponent {
-  showFilters = false;
-  
-  searchFilters: FilterItem[] = [
-    {
-      title: 'Name',
-      type: 'input',
-      searchKey: 'name',
-      placeholder: 'Enter name...'
-    },
-    {
-      title: 'Status',
-      type: 'comboSelect',
-      searchKey: 'status',
-      options: [
-        { key: 'Active', value: 'active' },
-        { key: 'Inactive', value: 'inactive' }
-      ]
-    },
-    {
-      title: 'Date Range',
-      type: 'dateRange',
-      searchKey: 'dateRange'
-    },
-    {
-      title: 'Price',
-      type: 'numeric',
-      searchKey: 'price',
-      min: 0,
-      max: 1000,
-      step: 10
-    }
-  ];
-  
-  onSearch(filters: Record<string, any>) {
-    console.log('Search filters:', filters);
-  }
-  
-  onReset() {
-    console.log('Filters reset');
-  }
-}
-```
-
-#### Filter Types
-- `input` - Text input field
-- `comboSelect` - Single/multiple select dropdown
-- `comboCheck` - Checkbox list
-- `date` - Single date picker
-- `dateRange` - Date range picker
-- `numeric` - Number input with min/max
-- `boolean` - Boolean toggle
-
-#### Inputs
-- `filterItems: FilterItem[]` - Array of filter configurations
-- `displaySearch: boolean` - Whether to show the search form
-- `persistInLocalStorage: boolean` - Save filters to localStorage (default: true)
-
-#### Outputs
-- `searchEvent: EventEmitter<FilterOutput>` - Emitted when search is triggered
-- `resetEvent: EventEmitter<void>` - Emitted when filters are reset
-- `displaySearchChange: EventEmitter<boolean>` - Emitted when display state changes
-
----
-
-### 3. Button Search Component
-
-A toggle button for showing/hiding search filters with keyboard shortcuts.
-
-#### Features
-- F3 keyboard shortcut support
-- Loading state
-- Bootstrap styling
-- Tooltip support
-
-#### Usage
-
-```typescript
-import { ButtonSearchComponent } from 'jhi-basic-component';
-
-@Component({
-  selector: 'app-toolbar',
-  imports: [ButtonSearchComponent],
-  template: `
-    <jhi-button-search
-      [displaySearch]="showSearch"
-      [isLoading]="loading"
-      (displaySearchChange)="onToggleSearch($event)">
-    </jhi-button-search>
-  `
-})
-export class ToolbarComponent {
+export class SearchExampleComponent {
   showSearch = false;
-  loading = false;
-  
+  searching = false;
+  searchFormGroup = this.fb.group({
+    name: [''],
+    category: [''],
+    dateFrom: [''],
+    dateTo: ['']
+  });
+
+  constructor(private fb: FormBuilder) {}
+
   onToggleSearch(show: boolean) {
     this.showSearch = show;
   }
+
+  onSearch(formValue: any) {
+    this.searching = true;
+    console.log('Searching with:', formValue);
+    // Perform search logic
+    setTimeout(() => this.searching = false, 2000);
+  }
+
+  onReset() {
+    this.searchFormGroup.reset();
+  }
 }
 ```
 
-#### Inputs
-- `displaySearch: boolean` - Current display state
-- `isLoading: boolean` - Whether to show loading spinner (default: false)
+#### ButtonSearchComponent Properties
 
-#### Outputs
-- `displaySearchChange: EventEmitter<boolean>` - Emitted when button is clicked
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `displaySearch` | `boolean` | `false` | Show/hide search state |
+| `isLoading` | `boolean` | `false` | Loading state |
+
+#### ButtonSearchComponent Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `displaySearchChange` | `EventEmitter<boolean>` | Emitted when toggle state changes |
+
+#### AdvancedSearchComponent Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `searchForm` | `FormGroup` | `required` | Reactive form for search |
+| `isLoading` | `boolean` | `false` | Loading state |
+
+#### AdvancedSearchComponent Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `searchSubmit` | `EventEmitter<any>` | Emitted when search is submitted |
+| `searchReset` | `EventEmitter<void>` | Emitted when form is reset |
 
 ---
 
-### 4. Breadcrumb Component
+### 3. Breadcrumb Component
 
-A navigation breadcrumb component with automatic route generation and intelligent back button support.
+An intelligent breadcrumb navigation component that automatically generates navigation paths.
 
 #### Features
-- Automatic breadcrumb generation
-- Intelligent naming based on URL paths (e.g., "/company-user/123" becomes "Company User")
-- Back route support with smart capitalization
-- FontAwesome icons
-- Full URL preservation for navigation
-- Responsive design
+- Auto-generates breadcrumb from URL paths
+- Back button with smart route handling
+- URL decoding for special characters
+- Customizable icons and labels
+- FontAwesome icon support
+- Smart path name generation
 
 #### Usage
 
@@ -219,53 +183,58 @@ A navigation breadcrumb component with automatic route generation and intelligen
 import { BreadcrumbComponent } from 'jhi-basic-component';
 
 @Component({
-  selector: 'app-page',
+  selector: 'app-breadcrumb-example',
   imports: [BreadcrumbComponent],
   template: `
     <jhi-breadcrumb
       [showBackButton]="true"
-      backButtonTitle="Go Back"
       currentPageTitle="User Details"
-      currentPageIcon="user">
+      currentPageIcon="user"
+      backButtonTitle="Previous View">
     </jhi-breadcrumb>
   `
 })
-export class PageComponent {}
+export class BreadcrumbExampleComponent {}
 ```
 
-#### Inputs
-- `showBackButton: boolean` - Whether to show back button (default: false)
-- `backButtonTitle: string` - Back button tooltip text (default: 'Go back')
-- `currentPageTitle: string` - Current page title (default: 'Current Page')
-- `currentPageIcon: string` - FontAwesome icon name (default: 'file')
+#### Advanced Usage with Custom Navigation
 
-#### Query Parameters
-- `backRoute` - Full URL for back navigation. The component automatically generates intelligent names:
-  - `/company/123` → "Company"
-  - `/company-user/456` → "Company User"
-  - `/payment-gateway` → "Payment Gateway"
-  - `/webhook-config/789/edit` → "Webhook Config"
-  - Falls back to "Previous View" if path cannot be parsed
+```typescript
+// Navigate to a page with backRoute parameter
+this.router.navigate(['/users/123/edit'], {
+  queryParams: {
+    backRoute: encodeURIComponent('/users?page=1&sort=name')
+  }
+});
+```
 
-#### How it Works
-The breadcrumb component automatically:
-1. Takes the full `backRoute` URL as-is (no parsing or modification)
-2. Analyzes the path to generate a user-friendly name
-3. Capitalizes words and handles hyphenated routes intelligently
-4. Preserves all query parameters and navigation state
-5. Uses an arrow-left icon for the back navigation
+The breadcrumb will automatically:
+- Decode the URL
+- Generate a readable name from the path (e.g., "Users" from "/users")
+- Create navigation links
+- Handle special characters properly
+
+#### Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `showBackButton` | `boolean` | `false` | Show back navigation button |
+| `backButtonTitle` | `string` | `'Go back'` | Back button tooltip |
+| `currentPageTitle` | `string` | `'Current Page'` | Current page display name |
+| `currentPageIcon` | `string` | `'file'` | Current page icon |
 
 ---
 
-### 5. Confirm Dialog Component & Service
+### 4. Confirm Dialog Service
 
-A modal confirmation dialog with customizable messages and buttons.
+A service for displaying confirmation dialogs with customizable messages and actions.
 
 #### Features
-- Customizable title, message, and buttons
-- Bootstrap modal styling
+- Bootstrap modal integration
+- Customizable messages
 - Promise-based API
-- Specialized activation/deactivation dialogs
+- Auto-focus on confirm button
+- Keyboard support (Enter/Escape)
 
 #### Usage
 
@@ -273,122 +242,133 @@ A modal confirmation dialog with customizable messages and buttons.
 import { ConfirmDialogService } from 'jhi-basic-component';
 
 @Component({
-  selector: 'app-actions',
+  selector: 'app-confirm-example',
   template: `
-    <button (click)="deleteItem()" class="btn btn-danger">Delete</button>
-    <button (click)="toggleActivation()" class="btn btn-warning">
-      {{ isActive ? 'Deactivate' : 'Activate' }}
+    <button 
+      class="btn btn-danger" 
+      (click)="deleteItem()">
+      Delete Item
+    </button>
+    
+    <button 
+      class="btn btn-warning" 
+      (click)="toggleStatus()">
+      Toggle Status
     </button>
   `
 })
-export class ActionsComponent {
-  isActive = true;
-  
+export class ConfirmExampleComponent {
   constructor(private confirmDialog: ConfirmDialogService) {}
-  
+
   async deleteItem() {
-    const confirmed = await this.confirmDialog.openDialog({
+    const confirmed = await this.confirmDialog.openDeleteDialog({
       title: 'Delete Item',
       message: 'Are you sure you want to delete this item? This action cannot be undone.',
-      confirmButtonText: 'Yes, Delete',
-      cancelButtonText: 'Cancel',
-      confirmButtonClass: 'btn-danger'
+      confirmText: 'Delete',
+      cancelText: 'Cancel'
     });
-    
+
     if (confirmed) {
       console.log('Item deleted');
+      // Perform deletion logic
     }
   }
-  
-  async toggleActivation() {
+
+  async toggleStatus() {
     const confirmed = await this.confirmDialog.openActivateDialog({
-      isActivated: !this.isActive
+      isActivated: true // or false
     });
-    
+
     if (confirmed) {
-      this.isActive = !this.isActive;
-      console.log('Status changed to:', this.isActive);
+      console.log('Status toggled');
+      // Perform status change logic
     }
   }
 }
 ```
 
-#### Service Methods
+#### Methods
 
-##### `openDialog(options)`
-Opens a generic confirmation dialog.
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| `openDeleteDialog(options)` | `{title?, message?, confirmText?, cancelText?}` | `Promise<boolean>` | Shows delete confirmation dialog |
+| `openActivateDialog(options)` | `{isActivated: boolean}` | `Promise<boolean>` | Shows activate/deactivate confirmation |
 
-**Options:**
-- `title?: string` - Dialog title (default: 'Confirm')
-- `message?: string` - Dialog message (default: 'Are you sure?')
-- `confirmButtonText?: string` - Confirm button text (default: 'Confirm')
-- `cancelButtonText?: string` - Cancel button text (default: 'Cancel')
-- `confirmButtonClass?: string` - Confirm button CSS class (default: 'btn-primary')
+## Requirements
 
-**Returns:** `Promise<boolean>` - true if confirmed, false if cancelled
-
-##### `openActivateDialog(options)`
-Opens a specialized activation/deactivation dialog.
-
-**Options:**
-- `isActivated: boolean` - Whether the item will be activated or deactivated
-
-**Returns:** `Promise<boolean>` - true if confirmed, false if cancelled
-
----
-
-## Dependencies
-
-This library requires the following peer dependencies:
-
-```json
-{
-  "@angular/common": "^18.0.0",
-  "@angular/core": "^18.0.0",
-  "@angular/forms": "^18.0.0",
-  "@angular/router": "^18.0.0",
-  "@fortawesome/angular-fontawesome": "^0.15.0",
-  "@ng-bootstrap/ng-bootstrap": "^17.0.0"
-}
-```
-
-## Installation with Dependencies
-
-```bash
-# Install the library
-npm install jhi-basic-component
-
-# Install peer dependencies if not already installed
-npm install @fortawesome/angular-fontawesome @ng-bootstrap/ng-bootstrap
-```
+- Angular 19+
+- Bootstrap 5+ (for styling)
+- FontAwesome (for icons)
+- NgBootstrap (for modals and tooltips)
 
 ## Setup
 
-1. Import NgBootstrap and FontAwesome in your app:
-
-```typescript
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
-@NgModule({
-  imports: [
-    NgbModule,
-    FontAwesomeModule,
-    // ... other imports
-  ]
-})
-export class AppModule {}
+1. Install the library:
+```bash
+npm install jhi-basic-component
 ```
 
-2. Import Bootstrap CSS in your styles:
+2. Install peer dependencies:
+```bash
+npm install @angular/core @angular/common @angular/forms @angular/router
+npm install @fortawesome/angular-fontawesome @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons
+npm install @ng-bootstrap/ng-bootstrap bootstrap
+```
 
+3. Import required modules in your `app.config.ts`:
+```typescript
+import { provideNgbConfig } from '@ng-bootstrap/ng-bootstrap';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ... other providers
+    provideNgbConfig(),
+    // Initialize FontAwesome
+    {
+      provide: FaIconLibrary,
+      useFactory: (library: FaIconLibrary) => {
+        library.addIconPacks(fas);
+        return library;
+      },
+      deps: [FaIconLibrary]
+    }
+  ]
+};
+```
+
+4. Import Bootstrap CSS in your `styles.scss`:
 ```scss
 @import '~bootstrap/dist/css/bootstrap.min.css';
 ```
 
+## Development
+
+For local development and testing:
+
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Build in watch mode: `npm run build:lib:watch`
+4. Link for local testing: `npm link` (in dist/jhi-basic-component)
+
+### Scripts
+
+- `npm run build:lib` - Build the library
+- `npm run build:lib:prod` - Build for production
+- `npm run build:lib:watch` - Build in watch mode
+- `npm run test:lib` - Run tests
+- `npm run pack:lib` - Create package
+- `npm run publish:lib` - Publish to npm
+- `npm run publish:lib:beta` - Publish beta version
+
 ## Contributing
 
-This library is part of the villcabo component ecosystem. For bug reports and feature requests, please create an issue in the repository.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
 
 ## License
 
@@ -396,20 +376,14 @@ MIT License
 
 ## Author
 
-<div align="center">
-  <img src="https://github.com/villcabo.png" width="100" height="100" style="border-radius: 50%;" alt="villcabo">
-  <br/>
-  <strong>villcabo</strong>
-  <br/>
-  <a href="https://github.com/villcabo">
-    <img src="https://img.shields.io/badge/GitHub-villcabo-blue?style=flat-square&logo=github" alt="GitHub Profile">
-  </a>
-  <br/>
-  <a href="https://github.com/villcabo/jhi-basic-component">
-    <img src="https://img.shields.io/badge/Repository-jhi--basic--component-green?style=flat-square&logo=github" alt="Repository">
-  </a>
-</div>
+**Bismarck Villca** ([@villcabo](https://github.com/villcabo))
 
----
+![GitHub Avatar](https://avatars.githubusercontent.com/u/7145004?v=4&s=50)
 
-*Built with ❤️ by villcabo*
+- **GitHub**: [villcabo](https://github.com/villcabo)
+- **Website**: [villcabo.github.io](https://villcabo.github.io/)
+- **Twitter**: [@BismarckVillcaS](https://twitter.com/BismarckVillcaS)
+- **Company**: [@SintesisSA](https://github.com/SintesisSA)
+- **Location**: Bolivia
+
+*Software Engineer & FullStack Developer specializing in Spring Boot, Angular, Docker, Kubernetes, and CI/CD with Jenkins, GitHub Actions, and TeamCity.*
