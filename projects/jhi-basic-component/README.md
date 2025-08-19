@@ -5,7 +5,7 @@ A comprehensive Angular component library providing essential UI components for 
 ## Installation
 
 ```bash
-npm install villcabo/jhi-basic-component
+npm install jhi-basic-component
 ```
 
 ## Components
@@ -24,7 +24,7 @@ A smart toggle component for activating/deactivating items with optional confirm
 #### Usage
 
 ```typescript
-import { ActiveToggleComponent } from 'villcabo/jhi-basic-component';
+import { ActiveToggleComponent } from 'jhi-basic-component';
 
 @Component({
   selector: 'app-example',
@@ -77,7 +77,7 @@ A powerful search component with multiple filter types and form validation.
 #### Usage
 
 ```typescript
-import { AdvancedSearchComponent, FilterItem } from 'villcabo/jhi-basic-component';
+import { AdvancedSearchComponent, FilterItem } from 'jhi-basic-component';
 
 @Component({
   selector: 'app-search',
@@ -169,7 +169,7 @@ A toggle button for showing/hiding search filters with keyboard shortcuts.
 #### Usage
 
 ```typescript
-import { ButtonSearchComponent } from 'villcabo/jhi-basic-component';
+import { ButtonSearchComponent } from 'jhi-basic-component';
 
 @Component({
   selector: 'app-toolbar',
@@ -216,7 +216,7 @@ A navigation breadcrumb component with automatic route generation and intelligen
 #### Usage
 
 ```typescript
-import { BreadcrumbComponent } from 'villcabo/jhi-basic-component';
+import { BreadcrumbComponent } from 'jhi-basic-component';
 
 @Component({
   selector: 'app-page',
@@ -270,7 +270,7 @@ A modal confirmation dialog with customizable messages and buttons.
 #### Usage
 
 ```typescript
-import { ConfirmDialogService } from 'villcabo/jhi-basic-component';
+import { ConfirmDialogService } from 'jhi-basic-component';
 
 @Component({
   selector: 'app-actions',
@@ -356,7 +356,7 @@ This library requires the following peer dependencies:
 
 ```bash
 # Install the library
-npm install villcabo/jhi-basic-component
+npm install jhi-basic-component
 
 # Install peer dependencies if not already installed
 npm install @fortawesome/angular-fontawesome @ng-bootstrap/ng-bootstrap
@@ -393,3 +393,23 @@ This library is part of the villcabo component ecosystem. For bug reports and fe
 ## License
 
 MIT License
+
+## Author
+
+<div align="center">
+  <img src="https://github.com/villcabo.png" width="100" height="100" style="border-radius: 50%;" alt="villcabo">
+  <br/>
+  <strong>villcabo</strong>
+  <br/>
+  <a href="https://github.com/villcabo">
+    <img src="https://img.shields.io/badge/GitHub-villcabo-blue?style=flat-square&logo=github" alt="GitHub Profile">
+  </a>
+  <br/>
+  <a href="https://github.com/villcabo/jhi-basic-component">
+    <img src="https://img.shields.io/badge/Repository-jhi--basic--component-green?style=flat-square&logo=github" alt="Repository">
+  </a>
+</div>
+
+---
+
+*Built with ❤️ by villcabo*
