@@ -47,36 +47,17 @@ export class BreadcrumbComponent implements OnInit {
   }
 
   /**
-   * Obtiene la URL base para el routerLink del botón de regreso
-   */
-  getBackRouteUrl(): string {
-    if (!this.backRouteSignal()) return '/';
-
-    const { url } = this.parseBackRoute(this.backRouteSignal()!);
-    return url;
-  }
-
-  /**
-   * Obtiene los query parameters para el routerLink del botón de regreso
-   */
-  getBackRouteQueryParams(): Record<string, any> | null {
-    if (!this.backRouteSignal()) return null;
-
-    const { queryParams } = this.parseBackRoute(this.backRouteSignal()!);
-    return Object.keys(queryParams).length > 0 ? queryParams : null;
-  }
-
-  /**
    * Genera automáticamente los items del breadcrumb basándose en el backRoute
    */
   private generateBreadcrumbItems(backRoute: string): IBreadcrumbItem[] {
     const items: IBreadcrumbItem[] = [{ label: 'Home', route: '/', icon: 'home' }];
 
-    // Simplemente agregar un item de "Vista Previa" para el backRoute
-    const { url } = this.parseBackRoute(backRoute);
+    // Generar un nombre descriptivo basado en la ruta
+    const previousViewName = this.generatePreviousViewName(backRoute);
+
     items.push({
-      label: 'Previous View',
-      route: url,
+      label: previousViewName,
+      route: backRoute,
       icon: 'arrow-left'
     });
 
@@ -87,30 +68,36 @@ export class BreadcrumbComponent implements OnInit {
   }
 
   /**
-   * Parsea query parameters de la URL
+   * Genera un nombre descriptivo para la vista previa basado en la ruta
    */
-  private parseQueryParams(queryString?: string): Record<string, string> {
-    const params: Record<string, string> = {};
-    if (queryString) {
-      const urlParams = new URLSearchParams(queryString);
-      urlParams.forEach((value, key) => {
-        params[key] = value;
-      });
-    }
-    return params;
-  }
+  private generatePreviousViewName(backRoute: string): string {
+    try {
+      // Extraer solo la parte de la URL sin query parameters para el nombre
+      const urlPart = backRoute.split('?')[0];
 
-  /**
-   * Extrae solo los query parameters relevantes para el breadcrumb
-   */
-  private extractRelevantQueryParams(allParams: Record<string, string>, relevantKeys: string[]): Record<string, string> {
-    const relevant: Record<string, string> = {};
-    relevantKeys.forEach(key => {
-      if (allParams[key]) {
-        relevant[key] = allParams[key];
+      // Obtener el último segmento significativo de la ruta
+      const segments = urlPart.split('/').filter(segment => segment && segment !== 'view' && segment !== 'edit');
+
+      if (segments.length === 0) {
+        return 'Previous View';
       }
-    });
-    return Object.keys(relevant).length > 0 ? relevant : undefined!;
+
+      // Tomar el último segmento (que generalmente es el más descriptivo)
+      const lastSegment = segments[segments.length - 1];
+
+      // Si es un número (ID), tomar el segmento anterior
+      if (!isNaN(Number(lastSegment)) && segments.length > 1) {
+        const entityType = segments[segments.length - 2];
+        return this.formatEntityLabel(entityType);
+      }
+
+      // Si no es un número, formatearlo directamente
+      return this.formatEntityLabel(lastSegment);
+
+    } catch (error) {
+      console.warn('Error generating previous view name:', error);
+      return 'Previous View';
+    }
   }
 
   /**
@@ -124,52 +111,19 @@ export class BreadcrumbComponent implements OnInit {
   }
 
   /**
-   * Parsea el backRoute y extrae la URL y query parameters
-   * Maneja tanto URLs codificadas como no codificadas
+   * Obtiene la URL base para el routerLink del botón de regreso
    */
-  private parseBackRoute(backRoute: string): { url: string; queryParams: Record<string, any> } {
-    try {
-      // Primero intentamos decodificar la URL completa
-      const decodedRoute = decodeURIComponent(backRoute);
+  getBackRouteUrl(): string {
+    if (!this.backRouteSignal()) return '/';
+    return this.backRouteSignal()!;
+  }
 
-      // Separar la URL base de los query parameters
-      const [baseUrl, queryString] = decodedRoute.split('?');
-
-      const queryParams: Record<string, any> = {};
-
-      if (queryString) {
-        // Parsear query parameters
-        const urlParams = new URLSearchParams(queryString);
-        urlParams.forEach((value, key) => {
-          // Manejar valores múltiples para la misma key
-          if (queryParams[key]) {
-            if (Array.isArray(queryParams[key])) {
-              queryParams[key].push(value);
-            } else {
-              queryParams[key] = [queryParams[key], value];
-            }
-          } else {
-            queryParams[key] = value;
-          }
-        });
-      }
-
-      return { url: baseUrl, queryParams };
-    } catch (error) {
-      // Si falla la decodificación, intentar con la URL original
-      console.warn('Error parsing backRoute:', error);
-      const [baseUrl, queryString] = backRoute.split('?');
-
-      const queryParams: Record<string, any> = {};
-      if (queryString) {
-        const urlParams = new URLSearchParams(queryString);
-        urlParams.forEach((value, key) => {
-          queryParams[key] = value;
-        });
-      }
-
-      return { url: baseUrl, queryParams };
-    }
+  /**
+   * Obtiene los query parameters para el routerLink del botón de regreso
+   */
+  getBackRouteQueryParams(): Record<string, any> | null {
+    // No necesitamos parsear query parameters, Angular los manejará automáticamente
+    return null;
   }
 
   /**

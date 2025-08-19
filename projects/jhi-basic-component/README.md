@@ -203,13 +203,14 @@ export class ToolbarComponent {
 
 ### 4. Breadcrumb Component
 
-A navigation breadcrumb component with automatic route generation and back button support.
+A navigation breadcrumb component with automatic route generation and intelligent back button support.
 
 #### Features
 - Automatic breadcrumb generation
-- Back route support with "Vista Previa" display
+- Intelligent naming based on URL paths (e.g., "/company-user/123" becomes "Company User")
+- Back route support with smart capitalization
 - FontAwesome icons
-- Query parameter handling
+- Full URL preservation for navigation
 - Responsive design
 
 #### Usage
@@ -239,7 +240,20 @@ export class PageComponent {}
 - `currentPageIcon: string` - FontAwesome icon name (default: 'file')
 
 #### Query Parameters
-- `backRoute` - Encoded URL for the back navigation, displays as "Vista Previa"
+- `backRoute` - Full URL for back navigation. The component automatically generates intelligent names:
+  - `/company/123` → "Company"
+  - `/company-user/456` → "Company User"
+  - `/payment-gateway` → "Payment Gateway"
+  - `/webhook-config/789/edit` → "Webhook Config"
+  - Falls back to "Previous View" if path cannot be parsed
+
+#### How it Works
+The breadcrumb component automatically:
+1. Takes the full `backRoute` URL as-is (no parsing or modification)
+2. Analyzes the path to generate a user-friendly name
+3. Capitalizes words and handles hyphenated routes intelligently
+4. Preserves all query parameters and navigation state
+5. Uses an arrow-left icon for the back navigation
 
 ---
 

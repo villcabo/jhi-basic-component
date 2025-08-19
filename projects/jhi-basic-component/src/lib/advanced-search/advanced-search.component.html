@@ -1,111 +1,155 @@
 @if (displaySearch) {
-  <div class="filter-container">
-    <div class="filter-header">
-      <h6 class="mb-3">
-        <fa-icon icon="search" class="me-2"></fa-icon>
-        Advanced Search
-        <small class="text-muted ms-3"> <kbd>F3</kbd> Hide | <kbd>F2</kbd> <kbd>Enter</kbd> Search | <kbd>F4</kbd> Reset </small>
-      </h6>
-    </div>
-    <form [formGroup]="filterForm" (ngSubmit)="onSearch()">
-      <div class="row">
-        @for (item of filterItems; let i = $index; track item.searchKey) {
-          <div class="col-md-3">
-            <div class="form-group">
-              <span>{{ item.title }}</span>
-
-              <!-- Input Text -->
-              <!-- Add #firstInput to the first input field -->
-              @if (item.type === 'input' && i === 0) {
-                <input
-                  #firstInput
-                  type="text"
-                  class="form-control"
-                  [formControlName]="item.searchKey"
-                  [placeholder]="item.placeholder || ''"
-                  [disabled]="item.disabled || false"
-                />
-              } @else if (item.type === 'input') {
-                <input
-                  type="text"
-                  class="form-control"
-                  [formControlName]="item.searchKey"
-                  [placeholder]="item.placeholder || ''"
-                  [disabled]="item.disabled || false"
-                />
-              }
-
-              <!-- Select -->
-              @if (item.type === 'comboSelect') {
-                <select
-                  class="form-control"
-                  [formControlName]="item.searchKey"
-                  (focus)="onLoadOptions(item)"
-                  [disabled]="item.disabled || optionsLoading()[item.searchKey]"
-                >
-                  <option value="">{{ item.placeholder || 'Seleccione...' }}</option>
-                  @if (item.options) {
-                    @for (opt of item.options; track opt.value) {
-                      <option [value]="opt.value">{{ opt.key }}</option>
-                    }
-                  }
-                  @if (optionsLoading()[item.searchKey]) {
-                    <option disabled>Cargando...</option>
-                  }
-                </select>
-              }
-
-              <!-- MultiSelect -->
-              @if (item.type === 'comboCheck') {
-                <select
-                  class="form-control"
-                  [formControlName]="item.searchKey"
-                  multiple
-                  (focus)="onLoadOptions(item)"
-                  [disabled]="item.disabled || optionsLoading()[item.searchKey]"
-                >
-                  @if (item.options) {
-                    @for (opt of item.options; track opt.value) {
-                      <option [value]="opt.value">{{ opt.key }}</option>
-                    }
-                  }
-                  @if (optionsLoading()[item.searchKey]) {
-                    <option disabled>Cargando...</option>
-                  }
-                </select>
-              }
-
-              <!-- Date Picker -->
-              @if (item.type === 'date') {
-                <input type="date" class="form-control" [formControlName]="item.searchKey" [disabled]="item.disabled || false" />
-              }
-
-              <!-- Numeric Input -->
-              @if (item.type === 'numeric') {
-                <input
-                  type="number"
-                  class="form-control"
-                  [formControlName]="item.searchKey"
-                  [min]="item.min || 0"
-                  [max]="item.max || 9999999999"
-                  [step]="item.step || 1"
-                  [disabled]="item.disabled || false"
-                />
-              }
-            </div>
-          </div>
-        }
-      </div>
-      <div class="row mt-3">
-        <div class="col-12 d-flex justify-content-end gap-2">
-          <button type="button" class="btn btn-outline-secondary rounded-pill" (click)="onReset()">
-            <fa-icon icon="eraser" class="me-1"></fa-icon> Reset
-          </button>
-          <button type="submit" class="btn btn-primary rounded-pill" (click)="onSearch()">
-            <fa-icon icon="search" class="me-1"></fa-icon> Search
+  <div class="advanced-search-container">
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">
+            <fa-icon icon="filter" class="me-2"></fa-icon>
+            Filters
+          </h5>
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-secondary"
+            (click)="onReset()"
+          >
+            <fa-icon icon="refresh" class="me-1"></fa-icon>
+            Reset
           </button>
         </div>
       </div>
-    </form>
+      <div class="card-body">
+        <form [formGroup]="filterForm!" (ngSubmit)="onSearch()">
+          <div class="row">
+            @for (filter of filterItems; track filter.searchKey) {
+              <div class="col-md-6 col-lg-4 mb-3">
+                <label class="form-label">{{ filter.title }}</label>
+
+                <!-- Input Field -->
+                @if (filter.type === 'input') {
+                  <input
+                    type="text"
+                    class="form-control"
+                    [placeholder]="filter.placeholder || ''"
+                    [formControlName]="filter.searchKey"
+                    [disabled]="filter.disabled ?? false"
+                  />
+                }
+
+                <!-- Combo Select -->
+                @if (filter.type === 'comboSelect') {
+                  <select
+                    class="form-select"
+                    [formControlName]="filter.searchKey"
+                    [disabled]="filter.disabled ?? false"
+                  >
+                    <option value="">Select...</option>
+                    @for (option of filter.options; track option.value) {
+                      <option [value]="option.value">{{ option.key }}</option>
+                    }
+                  </select>
+                }
+
+                <!-- Date Input -->
+                @if (filter.type === 'date') {
+                  <input
+                    type="date"
+                    class="form-control"
+                    [formControlName]="filter.searchKey"
+                    [disabled]="filter.disabled ?? false"
+                  />
+                }
+
+                <!-- Date Range -->
+                @if (filter.type === 'dateRange') {
+                  <div class="input-group">
+                    <input
+                      type="date"
+                      class="form-control"
+                      placeholder="From"
+                      [formControlName]="filter.searchKey + 'From'"
+                      [disabled]="filter.disabled ?? false"
+                    />
+                    <span class="input-group-text">to</span>
+                    <input
+                      type="date"
+                      class="form-control"
+                      placeholder="To"
+                      [formControlName]="filter.searchKey + 'To'"
+                      [disabled]="filter.disabled ?? false"
+                    />
+                  </div>
+                }
+
+                <!-- Numeric Input -->
+                @if (filter.type === 'numeric') {
+                  <input
+                    type="number"
+                    class="form-control"
+                    [placeholder]="filter.placeholder || ''"
+                    [formControlName]="filter.searchKey"
+                    [min]="filter.min ?? null"
+                    [max]="filter.max ?? null"
+                    [step]="filter.step ?? null"
+                    [disabled]="filter.disabled ?? false"
+                  />
+                }
+
+                <!-- Boolean Toggle -->
+                @if (filter.type === 'boolean') {
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [formControlName]="filter.searchKey"
+                      [disabled]="filter.disabled ?? false"
+                    />
+                    <label class="form-check-label">
+                      {{ filter.placeholder || 'Enable' }}
+                    </label>
+                  </div>
+                }
+
+                <!-- Combo Check (Multiple Checkboxes) -->
+                @if (filter.type === 'comboCheck') {
+                  <div
+                    class="border rounded p-2"
+                    style="max-height: 150px; overflow-y: auto;"
+                  >
+                    @for (option of filter.options; track option.value) {
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          [value]="option.value"
+                          [id]="filter.searchKey + '_' + option.value"
+                          [disabled]="filter.disabled ?? false"
+                        />
+                        <label
+                          class="form-check-label"
+                          [for]="filter.searchKey + '_' + option.value"
+                        >
+                          {{ option.key }}
+                        </label>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="d-flex justify-content-end mt-3">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="filterForm?.invalid"
+            >
+              <fa-icon icon="search" class="me-1"></fa-icon>
+              Search
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 }
