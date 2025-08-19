@@ -1,6 +1,6 @@
 {
   "name": "jhi-basic-component",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "peerDependencies": {
     "@angular/common": "20.1.0",
     "@angular/core": "20.1.0",
