@@ -1,2 +1,3 @@
-export { AdvancedSearchComponent } from './advanced-search.component';
-export { ButtonSearchComponent } from './button-search.component';
+export * from './advanced-search.component';
+export * from './button-search.component';
+

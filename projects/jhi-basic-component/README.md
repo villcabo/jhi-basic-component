@@ -1,128 +1,100 @@
 # JHI Basic Component Library
 
-A comprehensive Angular component library providing essential UI components for modern web applications. This library includes reusable components for toggles, advanced search functionality, breadcrumb navigation, and confirmation dialogs.
-
-## Version
-Current version: **1.0.1**
+A comprehensive Angular component library providing essential UI components for modern web applications.
 
 ## Installation
 
-Install the library via npm:
-
 ```bash
-npm install jhi-basic-component
-```
-
-### Dependencies
-
-This library requires the following peer dependencies:
-
-```json
-{
-  "@angular/common": "20.1.0",
-  "@angular/core": "20.1.0",
-  "@fortawesome/angular-fontawesome": "1.0.0",
-  "@fortawesome/fontawesome-svg-core": "6.7.2",
-  "@fortawesome/free-regular-svg-icons": "6.7.2",
-  "@fortawesome/free-solid-svg-icons": "6.7.2",
-  "@ng-bootstrap/ng-bootstrap": "18.0.0"
-}
+npm install villcabo/jhi-basic-component
 ```
 
 ## Components
 
-### 1. ActiveToggleComponent
+### 1. Active Toggle Component
 
-A customizable toggle component for activating/deactivating items with optional confirmation dialog.
+A smart toggle component for activating/deactivating items with optional confirmation dialogs.
 
 #### Features
-- Customizable active/inactive text
+- Customizable active/inactive states
+- Optional confirmation dialogs
 - Multiple sizes (sm, md, lg)
-- Optional confirmation dialog
 - Disabled state support
 - Bootstrap styling
 
 #### Usage
 
 ```typescript
-import { ActiveToggleComponent } from 'jhi-basic-component';
+import { ActiveToggleComponent } from 'villcabo/jhi-basic-component';
 
 @Component({
-  standalone: true,
+  selector: 'app-example',
   imports: [ActiveToggleComponent],
   template: `
     <jhi-active-toggle
-      [isActive]="userActive"
-      [disabled]="loading"
+      [isActive]="userStatus"
       [showConfirmDialog]="true"
       activeText="Active"
       inactiveText="Inactive"
       size="md"
-      (toggleChange)="onToggleUser($event)">
+      (toggleChange)="onStatusChange($event)">
     </jhi-active-toggle>
   `
 })
-export class UserComponent {
-  userActive = true;
-  loading = false;
-
-  onToggleUser(newState: boolean): void {
-    this.loading = true;
-    // Your API call here
-    this.userService.updateUserStatus(newState).subscribe(() => {
-      this.userActive = newState;
-      this.loading = false;
-    });
+export class ExampleComponent {
+  userStatus = true;
+  
+  onStatusChange(newStatus: boolean) {
+    console.log('Status changed to:', newStatus);
+    this.userStatus = newStatus;
   }
 }
 ```
 
-#### API
+#### Inputs
+- `isActive: boolean | null | undefined` - Current active state
+- `disabled: boolean` - Whether the toggle is disabled (default: false)
+- `activeText: string` - Text to display when active (default: 'Activated')
+- `inactiveText: string` - Text to display when inactive (default: 'Deactivated')
+- `size: 'sm' | 'md' | 'lg'` - Size of the toggle button (default: 'sm')
+- `showConfirmDialog: boolean` - Show confirmation dialog (default: true)
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `isActive` | `boolean \| null \| undefined` | `false` | Current active state |
-| `disabled` | `boolean` | `false` | Whether the toggle is disabled |
-| `activeText` | `string` | `'Activated'` | Text shown when active |
-| `inactiveText` | `string` | `'Deactivated'` | Text shown when inactive |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'sm'` | Size of the toggle button |
-| `showConfirmDialog` | `boolean` | `true` | Whether to show confirmation dialog |
+#### Outputs
+- `toggleChange: EventEmitter<boolean>` - Emitted when toggle state changes
 
-| Event | Type | Description |
-|-------|------|-------------|
-| `toggleChange` | `EventEmitter<boolean>` | Emitted when toggle state changes |
+---
 
-### 2. AdvancedSearchComponent
+### 2. Advanced Search Component
 
-A powerful search component with multiple filter types and keyboard shortcuts.
+A powerful search component with multiple filter types and form validation.
 
 #### Features
-- Multiple filter types: input, select, checkbox, date, numeric, boolean
+- Multiple filter types: input, select, date, numeric, boolean
 - Async option loading
-- Keyboard shortcuts (Enter to search, F2 to search, F4 to reset)
+- Local storage persistence
 - Form validation
-- URL parameter integration
+- Responsive design
 
 #### Usage
 
 ```typescript
-import { AdvancedSearchComponent, FilterItem, FilterOutput } from 'jhi-basic-component';
+import { AdvancedSearchComponent, FilterItem } from 'villcabo/jhi-basic-component';
 
 @Component({
-  standalone: true,
+  selector: 'app-search',
   imports: [AdvancedSearchComponent],
   template: `
     <jhi-advanced-search
-      [filterItems]="filterItems"
+      [filterItems]="searchFilters"
       [displaySearch]="showFilters"
-      (search)="onSearch($event)"
-      (reset)="onReset()">
+      (searchEvent)="onSearch($event)"
+      (resetEvent)="onReset()">
     </jhi-advanced-search>
   `
 })
 export class SearchComponent {
-  showFilters = true;
-  filterItems: FilterItem[] = [
+  showFilters = false;
+  
+  searchFilters: FilterItem[] = [
     {
       title: 'Name',
       type: 'input',
@@ -139,289 +111,271 @@ export class SearchComponent {
       ]
     },
     {
-      title: 'Created Date',
+      title: 'Date Range',
       type: 'dateRange',
-      searchKey: 'createdDate'
+      searchKey: 'dateRange'
     },
     {
-      title: 'Age',
+      title: 'Price',
       type: 'numeric',
-      searchKey: 'age',
+      searchKey: 'price',
       min: 0,
-      max: 120
+      max: 1000,
+      step: 10
     }
   ];
-
-  onSearch(filters: FilterOutput): void {
+  
+  onSearch(filters: Record<string, any>) {
     console.log('Search filters:', filters);
-    // Perform search with filters
   }
-
-  onReset(): void {
+  
+  onReset() {
     console.log('Filters reset');
-    // Handle reset
   }
 }
 ```
 
 #### Filter Types
+- `input` - Text input field
+- `comboSelect` - Single/multiple select dropdown
+- `comboCheck` - Checkbox list
+- `date` - Single date picker
+- `dateRange` - Date range picker
+- `numeric` - Number input with min/max
+- `boolean` - Boolean toggle
 
-| Type | Description | Additional Properties |
-|------|-------------|----------------------|
-| `input` | Text input field | `placeholder` |
-| `comboSelect` | Dropdown selection | `options`, `loadOptions`, `multiple` |
-| `comboCheck` | Checkbox group | `options`, `loadOptions` |
-| `date` | Single date picker | - |
-| `dateRange` | Date range picker | - |
-| `numeric` | Number input | `min`, `max`, `step` |
-| `boolean` | Boolean toggle | - |
+#### Inputs
+- `filterItems: FilterItem[]` - Array of filter configurations
+- `displaySearch: boolean` - Whether to show the search form
+- `persistInLocalStorage: boolean` - Save filters to localStorage (default: true)
 
-#### API
+#### Outputs
+- `searchEvent: EventEmitter<FilterOutput>` - Emitted when search is triggered
+- `resetEvent: EventEmitter<void>` - Emitted when filters are reset
+- `displaySearchChange: EventEmitter<boolean>` - Emitted when display state changes
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `filterItems` | `FilterItem[]` | Array of filter configurations |
-| `displaySearch` | `boolean` | Whether to show the search form |
+---
 
-| Event | Type | Description |
-|-------|------|-------------|
-| `search` | `EventEmitter<FilterOutput>` | Emitted when search is performed |
-| `reset` | `EventEmitter<void>` | Emitted when filters are reset |
+### 3. Button Search Component
 
-### 3. ButtonSearchComponent
+A toggle button for showing/hiding search filters with keyboard shortcuts.
 
-A companion component for toggling the advanced search visibility.
+#### Features
+- F3 keyboard shortcut support
+- Loading state
+- Bootstrap styling
+- Tooltip support
 
 #### Usage
 
 ```typescript
-import { ButtonSearchComponent } from 'jhi-basic-component';
+import { ButtonSearchComponent } from 'villcabo/jhi-basic-component';
 
 @Component({
-  standalone: true,
+  selector: 'app-toolbar',
   imports: [ButtonSearchComponent],
   template: `
     <jhi-button-search
-      [displaySearch]="showFilters"
+      [displaySearch]="showSearch"
       [isLoading]="loading"
       (displaySearchChange)="onToggleSearch($event)">
     </jhi-button-search>
   `
 })
-export class SearchPageComponent {
-  showFilters = false;
+export class ToolbarComponent {
+  showSearch = false;
   loading = false;
-
-  onToggleSearch(show: boolean): void {
-    this.showFilters = show;
+  
+  onToggleSearch(show: boolean) {
+    this.showSearch = show;
   }
 }
 ```
 
-### 4. BreadcrumbComponent
+#### Inputs
+- `displaySearch: boolean` - Current display state
+- `isLoading: boolean` - Whether to show loading spinner (default: false)
 
-An intelligent breadcrumb navigation component that automatically generates navigation paths.
+#### Outputs
+- `displaySearchChange: EventEmitter<boolean>` - Emitted when button is clicked
+
+---
+
+### 4. Breadcrumb Component
+
+A navigation breadcrumb component with automatic route generation and back button support.
 
 #### Features
-- Automatic breadcrumb generation from routes
-- Back button support
-- FontAwesome icon integration
+- Automatic breadcrumb generation
+- Back route support with "Vista Previa" display
+- FontAwesome icons
 - Query parameter handling
-- Customizable current page display
+- Responsive design
 
 #### Usage
 
 ```typescript
-import { BreadcrumbComponent } from 'jhi-basic-component';
+import { BreadcrumbComponent } from 'villcabo/jhi-basic-component';
 
 @Component({
-  standalone: true,
+  selector: 'app-page',
   imports: [BreadcrumbComponent],
   template: `
     <jhi-breadcrumb
       [showBackButton]="true"
-      [currentPageTitle]="pageTitle"
-      [currentPageIcon]="pageIcon"
-      backButtonTitle="Return to List">
+      backButtonTitle="Go Back"
+      currentPageTitle="User Details"
+      currentPageIcon="user">
     </jhi-breadcrumb>
   `
 })
-export class DetailPageComponent {
-  pageTitle = 'User Details';
-  pageIcon = 'user';
-}
+export class PageComponent {}
 ```
 
-#### API
+#### Inputs
+- `showBackButton: boolean` - Whether to show back button (default: false)
+- `backButtonTitle: string` - Back button tooltip text (default: 'Go back')
+- `currentPageTitle: string` - Current page title (default: 'Current Page')
+- `currentPageIcon: string` - FontAwesome icon name (default: 'file')
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `showBackButton` | `boolean` | `false` | Whether to show back button |
-| `backButtonTitle` | `string` | `'Go back'` | Back button tooltip text |
-| `currentPageTitle` | `string` | `'Current Page'` | Current page display name |
-| `currentPageIcon` | `string` | `'file'` | FontAwesome icon for current page |
+#### Query Parameters
+- `backRoute` - Encoded URL for the back navigation, displays as "Vista Previa"
 
-### 5. ConfirmDialogComponent & ConfirmDialogService
+---
 
-A flexible confirmation dialog system with customizable messages and buttons.
+### 5. Confirm Dialog Component & Service
+
+A modal confirmation dialog with customizable messages and buttons.
+
+#### Features
+- Customizable title, message, and buttons
+- Bootstrap modal styling
+- Promise-based API
+- Specialized activation/deactivation dialogs
 
 #### Usage
 
 ```typescript
-import { ConfirmDialogService } from 'jhi-basic-component';
+import { ConfirmDialogService } from 'villcabo/jhi-basic-component';
 
 @Component({
-  // ...
+  selector: 'app-actions',
+  template: `
+    <button (click)="deleteItem()" class="btn btn-danger">Delete</button>
+    <button (click)="toggleActivation()" class="btn btn-warning">
+      {{ isActive ? 'Deactivate' : 'Activate' }}
+    </button>
+  `
 })
-export class MyComponent {
+export class ActionsComponent {
+  isActive = true;
+  
   constructor(private confirmDialog: ConfirmDialogService) {}
-
-  async deleteUser(): Promise<void> {
+  
+  async deleteItem() {
     const confirmed = await this.confirmDialog.openDialog({
-      title: 'Delete User',
-      message: 'Are you sure you want to delete this user? This action cannot be undone.',
+      title: 'Delete Item',
+      message: 'Are you sure you want to delete this item? This action cannot be undone.',
       confirmButtonText: 'Yes, Delete',
       cancelButtonText: 'Cancel',
       confirmButtonClass: 'btn-danger'
     });
-
+    
     if (confirmed) {
-      // Perform deletion
-      this.userService.deleteUser(this.userId).subscribe();
+      console.log('Item deleted');
     }
   }
-
-  async toggleUserStatus(): Promise<void> {
-    const confirmed = await this.confirmDialog.openActivateDialog({ 
-      isActivated: !this.user.active 
+  
+  async toggleActivation() {
+    const confirmed = await this.confirmDialog.openActivateDialog({
+      isActivated: !this.isActive
     });
-
+    
     if (confirmed) {
-      this.user.active = !this.user.active;
-      this.userService.updateUser(this.user).subscribe();
+      this.isActive = !this.isActive;
+      console.log('Status changed to:', this.isActive);
     }
   }
 }
 ```
 
-#### ConfirmDialogService API
+#### Service Methods
 
-| Method | Parameters | Return | Description |
-|--------|------------|--------|-------------|
-| `openDialog` | `options: DialogOptions` | `Promise<boolean>` | Opens a custom confirmation dialog |
-| `openActivateDialog` | `options: { isActivated: boolean }` | `Promise<boolean>` | Opens an activate/deactivate confirmation |
+##### `openDialog(options)`
+Opens a generic confirmation dialog.
 
-#### DialogOptions Interface
+**Options:**
+- `title?: string` - Dialog title (default: 'Confirm')
+- `message?: string` - Dialog message (default: 'Are you sure?')
+- `confirmButtonText?: string` - Confirm button text (default: 'Confirm')
+- `cancelButtonText?: string` - Cancel button text (default: 'Cancel')
+- `confirmButtonClass?: string` - Confirm button CSS class (default: 'btn-primary')
 
-```typescript
-interface DialogOptions {
-  title?: string;
-  message?: string;
-  confirmButtonText?: string;
-  cancelButtonText?: string;
-  confirmButtonClass?: string;
+**Returns:** `Promise<boolean>` - true if confirmed, false if cancelled
+
+##### `openActivateDialog(options)`
+Opens a specialized activation/deactivation dialog.
+
+**Options:**
+- `isActivated: boolean` - Whether the item will be activated or deactivated
+
+**Returns:** `Promise<boolean>` - true if confirmed, false if cancelled
+
+---
+
+## Dependencies
+
+This library requires the following peer dependencies:
+
+```json
+{
+  "@angular/common": "^18.0.0",
+  "@angular/core": "^18.0.0",
+  "@angular/forms": "^18.0.0",
+  "@angular/router": "^18.0.0",
+  "@fortawesome/angular-fontawesome": "^0.15.0",
+  "@ng-bootstrap/ng-bootstrap": "^17.0.0"
 }
 ```
 
-## Setup and Configuration
-
-### 1. Import Required Modules
-
-In your `app.config.ts` or module setup:
-
-```typescript
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
-export const appConfig: ApplicationConfig = {
-  providers: [
-    // ... other providers
-    provideAnimations(),
-    // ... 
-  ],
-};
-
-// If using modules, import NgbModule in your app module
-@NgModule({
-  imports: [NgbModule],
-  // ...
-})
-export class AppModule { }
-```
-
-### 2. FontAwesome Setup
-
-Configure FontAwesome icons in your main application:
-
-```typescript
-import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-
-export class AppComponent {
-  constructor(library: FaIconLibrary) {
-    library.addIconPacks(fas);
-  }
-}
-```
-
-### 3. Bootstrap Styles
-
-Ensure Bootstrap CSS is included in your `angular.json` or `styles.scss`:
-
-```scss
-@import 'bootstrap/dist/css/bootstrap.min.css';
-```
-
-## Keyboard Shortcuts
-
-| Component | Shortcut | Action |
-|-----------|----------|--------|
-| AdvancedSearch | `Enter` | Perform search |
-| AdvancedSearch | `F2` | Perform search |
-| AdvancedSearch | `F4` | Reset filters |
-| ButtonSearch | `F3` | Toggle search visibility |
-
-## Building the Library
-
-To build the library for distribution:
+## Installation with Dependencies
 
 ```bash
-ng build jhi-basic-component
+# Install the library
+npm install villcabo/jhi-basic-component
+
+# Install peer dependencies if not already installed
+npm install @fortawesome/angular-fontawesome @ng-bootstrap/ng-bootstrap
 ```
 
-The build artifacts will be stored in the `dist/jhi-basic-component` directory.
+## Setup
 
-## Publishing
+1. Import NgBootstrap and FontAwesome in your app:
 
-1. Build the library:
-   ```bash
-   ng build jhi-basic-component
-   ```
+```typescript
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-2. Navigate to the dist directory:
-   ```bash
-   cd dist/jhi-basic-component
-   ```
+@NgModule({
+  imports: [
+    NgbModule,
+    FontAwesomeModule,
+    // ... other imports
+  ]
+})
+export class AppModule {}
+```
 
-3. Publish to npm:
-   ```bash
-   npm publish
-   ```
+2. Import Bootstrap CSS in your styles:
+
+```scss
+@import '~bootstrap/dist/css/bootstrap.min.css';
+```
 
 ## Contributing
 
-When contributing to this library:
-
-1. Follow Angular best practices
-2. Ensure all components are standalone
-3. Add comprehensive documentation for new features
-4. Include usage examples
-5. Test thoroughly before submitting
+This library is part of the villcabo component ecosystem. For bug reports and feature requests, please create an issue in the repository.
 
 ## License
 
-This library is distributed under the MIT License.
-
-## Support
-
-For issues, feature requests, or questions, please refer to the project repository or contact the maintainers.
+MIT License

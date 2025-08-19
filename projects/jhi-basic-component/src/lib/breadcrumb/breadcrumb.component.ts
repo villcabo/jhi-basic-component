@@ -72,104 +72,18 @@ export class BreadcrumbComponent implements OnInit {
   private generateBreadcrumbItems(backRoute: string): IBreadcrumbItem[] {
     const items: IBreadcrumbItem[] = [{ label: 'Home', route: '/', icon: 'home' }];
 
-    try {
-      const decodedRoute = decodeURIComponent(backRoute);
-      const [baseUrl, queryString] = decodedRoute.split('?');
-
-      // Parsear query parameters para contexto adicional
-      const queryParams = this.parseQueryParams(queryString);
-
-      // Analizar la URL para generar breadcrumbs inteligentes
-      const urlSegments = baseUrl.split('/').filter(segment => segment.length > 0);
-
-      this.buildBreadcrumbFromSegments(urlSegments, queryParams, items);
-    } catch (error) {
-      console.warn('Error generating breadcrumb from backRoute:', error);
-      items.push({ label: 'Back', route: backRoute.split('?')[0], icon: 'arrow-left' });
-    }
+    // Simplemente agregar un item de "Vista Previa" para el backRoute
+    const { url } = this.parseBackRoute(backRoute);
+    items.push({
+      label: 'Previous View',
+      route: url,
+      icon: 'arrow-left'
+    });
 
     // Agregar página actual
     items.push({ label: this.currentPageTitle, icon: this.currentPageIcon });
 
     return items;
-  }
-
-  /**
-   * Construye el breadcrumb basándose en los segmentos de URL
-   */
-  private buildBreadcrumbFromSegments(segments: string[], queryParams: Record<string, string>, items: IBreadcrumbItem[]): void {
-    for (let i = 0; i < segments.length; i += 2) {
-      const entityType = segments[i];
-      const entityId = segments[i + 1];
-
-      switch (entityType) {
-        case 'company':
-          items.push({ label: 'Companies', route: '/company', icon: 'building' });
-          if (entityId) {
-            const companyRoute = `/company/${entityId}`;
-            // Detectar si es vista de detalle
-            if (segments[i + 2] === 'view') {
-              items.push({
-                label: `Company #${entityId}`,
-                route: companyRoute + '/view',
-                queryParams: this.extractRelevantQueryParams(queryParams, ['tab']),
-                icon: 'info-circle',
-              });
-              i++; // Saltar el segmento 'view'
-            } else {
-              items.push({ label: `Company #${entityId}`, route: companyRoute, icon: 'info-circle' });
-            }
-          }
-          break;
-
-        case 'company-user':
-          items.push({ label: 'Company Users', route: '/company-user', icon: 'users' });
-          if (entityId) {
-            items.push({ label: `User #${entityId}`, route: `/company-user/${entityId}`, icon: 'user' });
-          }
-          break;
-
-        case 'company-service-type':
-          items.push({ label: 'Service Types', route: '/company-service-type', icon: 'th-list' });
-          if (entityId) {
-            items.push({ label: `Service #${entityId}`, route: `/company-service-type/${entityId}`, icon: 'cog' });
-          }
-          break;
-
-        case 'webhook-config':
-          items.push({ label: 'Webhooks', route: '/webhook-config', icon: 'webhook' });
-          if (entityId) {
-            items.push({ label: `Webhook #${entityId}`, route: `/webhook-config/${entityId}`, icon: 'link' });
-          }
-          break;
-
-        case 'payment-gateway':
-          items.push({ label: 'Payment Gateways', route: '/payment-gateway', icon: 'credit-card' });
-          if (entityId) {
-            items.push({ label: `Gateway #${entityId}`, route: `/payment-gateway/${entityId}`, icon: 'gateway' });
-          }
-          break;
-
-        default:
-          // Para entidades no reconocidas, crear un breadcrumb genérico
-          if (entityId) {
-            const label = this.formatEntityLabel(entityType);
-            items.push({
-              label: `${label} #${entityId}`,
-              route: `/${entityType}/${entityId}`,
-              icon: 'file',
-            });
-          } else {
-            const label = this.formatEntityLabel(entityType);
-            items.push({
-              label,
-              route: `/${entityType}`,
-              icon: 'list',
-            });
-          }
-          break;
-      }
-    }
   }
 
   /**
