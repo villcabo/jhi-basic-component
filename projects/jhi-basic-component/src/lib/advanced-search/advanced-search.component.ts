@@ -94,7 +94,7 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit, OnChanges
     this.loadFromUrl();
   }
 
-  private async onLoadOptions(item: FilterItem): Promise<void> {
+  async onLoadOptions(item: FilterItem): Promise<void> {
     if (item.loadOptions && !item.options) {
       this.optionsLoading.update(current => ({
         ...current,
