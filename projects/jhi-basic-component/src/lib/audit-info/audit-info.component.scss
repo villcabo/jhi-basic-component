@@ -1,0 +1,113 @@
+.audit-info {
+  font-size: 0.65rem;
+  line-height: 1.1;
+  min-width: 120px;
+  background: rgba(248, 249, 250, 0.8);
+  border-radius: 4px;
+  padding: 3px 6px;
+  border: 1px solid rgba(222, 226, 230, 0.6);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.audit-info:hover {
+  background: rgba(233, 236, 239, 0.9);
+  border-color: #007bff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.audit-line {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1px;
+  gap: 3px;
+}
+
+.audit-line:last-child {
+  margin-bottom: 0;
+}
+
+.audit-icon {
+  font-size: 0.6rem;
+  flex-shrink: 0;
+}
+
+.created-icon {
+  color: #28a745;
+}
+
+.modified-icon {
+  color: #ffc107;
+}
+
+.audit-user {
+  font-weight: 600;
+  color: #495057;
+  max-width: 120px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-shrink: 1;
+}
+
+.audit-date {
+  color: #6c757d;
+  font-size: 0.6rem;
+  font-weight: 500;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.audit-action {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.audit-info:hover .audit-action {
+  opacity: 1;
+}
+
+.action-icon {
+  color: #007bff;
+  font-size: 0.7rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .audit-info {
+    font-size: 0.6rem;
+    min-width: 100px;
+    padding: 2px 4px;
+  }
+
+  .audit-icon {
+    font-size: 0.55rem;
+  }
+
+  .audit-action {
+    top: 1px;
+    right: 2px;
+  }
+
+  .action-icon {
+    font-size: 0.65rem;
+  }
+}
