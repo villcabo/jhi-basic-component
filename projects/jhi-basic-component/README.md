@@ -376,14 +376,20 @@ MIT License
 
 ## Author
 
-**Bismarck Villca** ([@villcabo](https://github.com/villcabo))
+<div align="center">
+  <img src="https://github.com/villcabo.png" width="100" height="100" style="border-radius: 50%;" alt="villcabo">
+  <br/>
+  <strong>Bismarck Villca</strong>
+  <br/>
+  <a href="https://github.com/villcabo">
+    <img src="https://img.shields.io/badge/GitHub-villcabo-blue?style=flat-square&logo=github" alt="GitHub Profile">
+  </a>
+  <br/>
+  <a href="https://github.com/villcabo/jhi-basic-component">
+    <img src="https://img.shields.io/badge/Repository-jhi--basic--component-green?style=flat-square&logo=github" alt="Repository">
+  </a>
+</div>
 
-![GitHub Avatar](https://avatars.githubusercontent.com/u/7145004?v=4&s=50)
+---
 
-- **GitHub**: [villcabo](https://github.com/villcabo)
-- **Website**: [villcabo.github.io](https://villcabo.github.io/)
-- **Twitter**: [@BismarckVillcaS](https://twitter.com/BismarckVillcaS)
-- **Company**: [@SintesisSA](https://github.com/SintesisSA)
-- **Location**: Bolivia
-
-*Software Engineer & FullStack Developer specializing in Spring Boot, Angular, Docker, Kubernetes, and CI/CD with Jenkins, GitHub Actions, and TeamCity.*
+*Built with ❤️ by villcabo*
