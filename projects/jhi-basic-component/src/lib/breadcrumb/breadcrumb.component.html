@@ -6,8 +6,7 @@
         @if (showBackButton) {
           <a
             class="btn btn-outline-secondary me-3"
-            [routerLink]="getBackRouteUrl()"
-            [queryParams]="getBackRouteQueryParams()"
+            [href]="getBackRouteUrl()"
             [title]="backButtonTitle"
           >
             <fa-icon icon="arrow-left"></fa-icon>
@@ -19,12 +18,21 @@
             @for (item of items(); track item.label; let last = $last) {
               <li class="breadcrumb-item" [class.active]="last">
                 @if (!last && item.route) {
-                  <a [routerLink]="item.route" [queryParams]="item.queryParams" class="text-decoration-none">
-                    @if (item.icon) {
-                      <fa-icon [icon]="item.icon" class="me-1"></fa-icon>
-                    }
-                    {{ item.label }}
-                  </a>
+                  @if (item.isBackRoute) {
+                    <a [href]="item.route" class="text-decoration-none">
+                      @if (item.icon) {
+                        <fa-icon [icon]="item.icon" class="me-1"></fa-icon>
+                      }
+                      {{ item.label }}
+                    </a>
+                  } @else {
+                    <a [routerLink]="item.route" [queryParams]="item.queryParams" class="text-decoration-none">
+                      @if (item.icon) {
+                        <fa-icon [icon]="item.icon" class="me-1"></fa-icon>
+                      }
+                      {{ item.label }}
+                    </a>
+                  }
                 } @else {
                   <span>
                     @if (item.icon) {

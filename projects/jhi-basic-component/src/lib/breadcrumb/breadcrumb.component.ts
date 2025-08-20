@@ -52,9 +52,7 @@ export class BreadcrumbComponent implements OnInit {
     const items: IBreadcrumbItem[] = [{ label: 'Home', route: '/', icon: 'home' }];
 
     // Generar un nombre descriptivo basado en la ruta
-    const previousViewName = this.getBackRouteUrl();
-
-    const previousViewRoute = this.getBackRouteQueryParams();
+    const previousViewName = this.generatePreviousViewName(backRoute);
 
     // Generar un icono apropiado basado en el nombre
     const previousViewIcon = this.generateIconForRoute(backRoute, previousViewName);
@@ -62,8 +60,8 @@ export class BreadcrumbComponent implements OnInit {
     items.push({
       label: previousViewName,
       route: backRoute,
-      queryParams: previousViewRoute,
-      icon: previousViewIcon
+      icon: previousViewIcon,
+      isBackRoute: true  // Marcar como backRoute para usar href
     });
 
     // Agregar página actual
@@ -449,41 +447,13 @@ export class BreadcrumbComponent implements OnInit {
   }
 
   /**
-   * Obtiene la URL base para el routerLink del botón de regreso
+   * Obtiene la URL completa para el href del botón de regreso
    */
   getBackRouteUrl(): string {
     if (!this.backRouteSignal()) return '/';
 
-    const backRoute = this.backRouteSignal()!;
-    // Separar la ruta base de los query parameters
-    const urlParts = backRoute.split('?');
-    return urlParts[0] || '/';
-  }
-
-  /**
-   * Obtiene los query parameters para el routerLink del botón de regreso
-   */
-  getBackRouteQueryParams(): Record<string, any> | null {
-    if (!this.backRouteSignal()) return null;
-
-    const backRoute = this.backRouteSignal()!;
-    const urlParts = backRoute.split('?');
-
-    // Si no hay query parameters, retornar null
-    if (urlParts.length < 2 || !urlParts[1]) {
-      return null;
-    }
-
-    // Parsear los query parameters
-    const queryString = urlParts[1];
-    const queryParams: Record<string, any> = {};
-
-    const params = new URLSearchParams(queryString);
-    params.forEach((value, key) => {
-      queryParams[key] = value;
-    });
-
-    return Object.keys(queryParams).length > 0 ? queryParams : null;
+    // Devolver la URL completa tal como viene, sin dividirla
+    return this.backRouteSignal()!;
   }
 
   /**

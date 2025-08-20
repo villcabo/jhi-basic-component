@@ -3,4 +3,5 @@ export interface IBreadcrumbItem {
   route?: string;
   queryParams?: Record<string, any> | null;
   icon?: string;
+  isBackRoute?: boolean;
 }
