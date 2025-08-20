@@ -8,6 +8,9 @@ export * from './lib/active-toggle';
 // Advanced Search Component
 export * from './lib/advanced-search';
 
+// Audit Info Component
+export * from './lib/audit-info';
+
 // Breadcrumb Component
 export * from './lib/breadcrumb';
 
