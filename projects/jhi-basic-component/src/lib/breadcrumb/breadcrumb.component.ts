@@ -52,7 +52,9 @@ export class BreadcrumbComponent implements OnInit {
     const items: IBreadcrumbItem[] = [{ label: 'Home', route: '/', icon: 'home' }];
 
     // Generar un nombre descriptivo basado en la ruta
-    const previousViewName = this.generatePreviousViewName(backRoute);
+    const previousViewName = this.getBackRouteUrl();
+
+    const previousViewRoute = this.getBackRouteQueryParams();
 
     // Generar un icono apropiado basado en el nombre
     const previousViewIcon = this.generateIconForRoute(backRoute, previousViewName);
@@ -60,6 +62,7 @@ export class BreadcrumbComponent implements OnInit {
     items.push({
       label: previousViewName,
       route: backRoute,
+      queryParams: previousViewRoute,
       icon: previousViewIcon
     });
 
