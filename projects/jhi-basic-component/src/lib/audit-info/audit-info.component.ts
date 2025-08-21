@@ -33,7 +33,6 @@ function extractAuditInfo(entity: any): AuditableEntity {
   template: `
     <div class="audit-info" (click)="openAuditModal()">
       <div class="audit-line">
-        Hola
         <fa-icon icon="calendar-check" class="audit-icon created-icon"></fa-icon>
         <span class="audit-user">{{ auditInfo().createdBy || 'N/A' }}</span>
         <span class="audit-date">{{ auditInfo().createdDate | date: 'yyyy-MM-dd HH:mm' }}</span>
